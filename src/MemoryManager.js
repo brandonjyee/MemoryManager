@@ -3,7 +3,15 @@ Since I only have 2 hours, my approach is to do the most naive approach first:
 - For an alloc(), search for an open contiguous chunk of memory that fits the given request size. Return the first one found. If none found, return null
 - For a free(), mark the given memory locations as free
 
-If have time, can try a better algorithm.
+If have time, can try a better algorithm. ==> didn't have time.
+
+- This implementation does have number of safety issues. Nothing is preventing client code from freeing a MemoryChunk that it doesn't "own". They can easily modify the attributes in the MemoryChunk to refer to any memory location.
+- Client code can also free the same MemoryChunk multiple times
+- To fix these issues, may use an id for the specific chunk that was allocated, so that the client has to provide the correct id to free the chunk and then we can also check if that chunk has been freed already
+
+-There's no defragmenting of the memory. So even though there might be enough memory overall to allocate a specific chunk, a call to alloc() may not allocate the memory b/c the memory is divided up. If the MemoryManager could smartly defragment the memory then the contiguous chunk would become available.
+
+- If I had more time, I would google some better Memory Manager algorithms.
 
 */
 class MemoryChunk {
